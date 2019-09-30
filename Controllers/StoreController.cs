@@ -22,10 +22,11 @@ namespace hiddenGems.Controllers
         }
 
         [HttpGet("inventory")]
-        public IEnumerable<EquipmentExport> Inventory()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Inventory()
         {
             var equipmentExports = from eq in store.getInventory() select new EquipmentExport(eq);
-            return equipmentExports;
+            return Ok(equipmentExports);
         }
 
         [HttpPost("buy/{characterId}/{equipmentId}")]
@@ -39,6 +40,13 @@ namespace hiddenGems.Controllers
                 string message = e.Message;
                 return BadRequest(message);
             }
+        }
+
+        [HttpPost("restock")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Restock() {
+            var equipmentExports = store.generateEquipmentAndRestock().Select(eq => new EquipmentExport(eq));
+            return Ok(equipmentExports);
         }
     }
 }

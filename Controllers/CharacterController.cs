@@ -21,12 +21,12 @@ namespace hiddenGems.Controllers
             store = Store.Instance;
         }
 
-        [HttpGet("inventory")]
-        public IEnumerable<EquipmentExport> Inventory()
-        {
-            var equipmentExports = from eq in store.getCharacterInventory() select new EquipmentExport(eq);
-            return equipmentExports;
-        }
+        // [HttpGet("inventory")]
+        // public IEnumerable<EquipmentExport> Inventory()
+        // {
+        //     var equipmentExports = from eq in store.getCharacterInventory() select new EquipmentExport(eq);
+        //     return equipmentExports;
+        // }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,6 +39,13 @@ namespace hiddenGems.Controllers
                 string message = e.Message;
                 return BadRequest(message);
             }
+        }
+
+        [HttpPost("refinance/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Refinance(int id) {
+            var gold = store.refinanceCharacter(id);
+            return Ok(gold);
         }
     }
 }

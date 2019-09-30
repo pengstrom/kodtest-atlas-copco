@@ -60,8 +60,18 @@ namespace hiddenGems {
             return this.character;
         }
 
-        public void generateEquipmentAndRestock() {
+        public IEnumerable<Equipment> generateEquipmentAndRestock() {
             this.inventory.generateEquipment(StoreConfig.NEW_EQUIPMENT_COUNT_LAMBDA);
+            return this.inventory.inventory();
+        }
+
+        public int refinanceCharacter(int characterId) {
+            var character = getCharacterById(characterId);
+            
+            int gold = generateGold();
+            character.gold += gold;
+
+            return gold;
         }
 
         private void addAttributes() {
@@ -75,9 +85,12 @@ namespace hiddenGems {
 
         private void generateCharacter() {
             string name = Utils.uniformFromArray(StoreConfig.CHARACTER_NAMES);
-            int gold = (int) Math.Round(Normal.Sample(StoreConfig.MEAN_GOLD, StoreConfig.STDDEV_GOLD));
-
+            int gold = generateGold();
             this.character = new Character(1, name, gold);
+        }
+
+        private int generateGold() {
+            return (int) Math.Round(Normal.Sample(StoreConfig.MEAN_GOLD, StoreConfig.STDDEV_GOLD));
         }
     }
 
