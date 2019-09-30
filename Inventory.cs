@@ -32,9 +32,10 @@ namespace hiddenGems {
 
         public void generateEquipment(double lambda) {
             int count = Poisson.Sample(lambda);
+            int countClamped = count > 1 ? count : 1;
 
             Equipment[] newEquipment = Enumerable
-            .Range(1, count)
+            .Range(1, countClamped)
             .Select(i => this.generateEquipment())
             .ToArray();
 

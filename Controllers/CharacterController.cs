@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace hiddenGems.Controllers
@@ -25,6 +26,19 @@ namespace hiddenGems.Controllers
         {
             var equipmentExports = from eq in store.getCharacterInventory() select new EquipmentExport(eq);
             return equipmentExports;
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Info(int id) {
+            try {
+                var character = store.getCharacterById(id);
+                return Ok(new CharacterExport(character));
+            } catch (StoreError e) {
+                string message = e.Message;
+                return BadRequest(message);
+            }
         }
     }
 }

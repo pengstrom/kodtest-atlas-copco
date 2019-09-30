@@ -39,15 +39,25 @@ namespace hiddenGems {
             return from eq in this.character.equipment select eq.Value;
         }
 
-        public void purchaseEquipment(int equipmentId) {
+        public Equipment purchaseEquipment(int charachterId, int equipmentId) {
+            Character character = this.getCharacterById(charachterId);
             Equipment equipment = this.inventory.getEquipmentById(equipmentId);
             int cost = equipment.price;
 
-            if (cost < this.character.gold) {
-                this.character.gold -= cost;
-                this.inventory.removeEquipmentById(equipmentId);
-                this.character.addEquipment(equipment);
+            if (cost > character.gold) {
+                throw new InsufficientFundsError();
             }
+
+            character.gold -= cost;
+            this.inventory.removeEquipmentById(equipmentId);
+            character.addEquipment(equipment);
+            return equipment;
+        }
+
+        public Character getCharacterById(int charachterId)
+        {
+            // Future work: add support for multiple users
+            return this.character;
         }
 
         public void generateEquipmentAndRestock() {
@@ -69,5 +79,13 @@ namespace hiddenGems {
 
             this.character = new Character(1, name, gold);
         }
+    }
+
+    public class StoreError : Exception {
+        public StoreError(string message) : base(message) {}
+    }
+
+    public class InsufficientFundsError : StoreError {
+        public InsufficientFundsError() : base("Insufficient funds") {}
     }
 }
