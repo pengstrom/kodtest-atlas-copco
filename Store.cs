@@ -83,10 +83,23 @@ namespace hiddenGems {
             }
         }
 
-        private void generateCharacter() {
+        private Character generateCharacter() {
             string name = Utils.uniformFromArray(StoreConfig.CHARACTER_NAMES);
             int gold = generateGold();
-            this.character = new Character(1, name, gold);
+
+            Character character = new Character(1, name, gold);
+            generateAttributes(character);
+
+            this.character = character;
+
+            return character;
+        }
+
+        private void generateAttributes(Character character) {
+            foreach (Attribute attribute in attributes.Select(x => x.Value)) {
+                int value = Poisson.Sample(StoreConfig.MODIFIER_LAMBDA * 2.0d);
+                character.setAttribute(attribute, value);
+            }
         }
 
         private int generateGold() {

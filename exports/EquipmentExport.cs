@@ -28,8 +28,7 @@ namespace hiddenGems {
             Attribute attribute = bonus.Item1;
             int modifier = bonus.Item2;
 
-            AttributeExport attributeExport = new AttributeExport(bonus.Item1);
-            BonusExport bonusExport = new BonusExport(attributeExport, bonus.Item2);
+            BonusExport bonusExport = new BonusExport(bonus.Item1, bonus.Item2);
 
             return bonusExport;
         }
@@ -39,8 +38,8 @@ namespace hiddenGems {
         public int modifier { get; }
         public AttributeExport attribute { get; }
 
-        public BonusExport(AttributeExport attribute, int modifier) {
-            this.attribute = attribute;
+        public BonusExport(Attribute attribute, int modifier) {
+            this.attribute = new AttributeExport(attribute);
             this.modifier = modifier;
         }
     }
