@@ -46,7 +46,7 @@ export class Shop extends Component<{}, StoreState> {
                         <h2>Inventory ({this.inventorySize()})</h2>
                         { this.renderInventory() }
                     </div>
-                    <div className="col-md-4 mt-3 mt-sm-0">
+                    <div className="col-md-4 mt-3 mt-sm-0 mb-3">
                         <h5>Restock</h5>
                         <p>Use the button to wait for the store to restock.</p>
                         <button className="btn btn-warning" onClick={() => this.restock() }>Wait for restock</button>

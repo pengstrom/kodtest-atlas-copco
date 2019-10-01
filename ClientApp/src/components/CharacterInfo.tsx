@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Character, Attribute } from '../objects/Store';
-
-import './CharacterInfo.css';
+import { Character, Equipment, ValuedAttribute } from '../objects/Store';
 import _ from 'lodash';
 import { EquipmentItem } from './EquipmentItem';
 
@@ -28,28 +26,49 @@ export class CharacterInfo extends Component<CharacterProps> {
 
           <h5 className="mt-3">Attributes</h5>
 
-          <div className="border-bottom"></div>
-          {character.attributes.map(({ attribute, modifier}) => {
-            const bonus = bonuses[attribute.id] || 0;
-            return <div className="border-bottom py-3" key={attribute.id}>
-              <div>
-                {attribute.name}: {modifier} + <span className="text-success">{bonus}</span> = <span className="text-primary">{modifier + bonus}</span>
-              </div>
-            </div>;
-          })}
+          { this.renderAttributes(character.attributes, bonuses) }
         </div>
 
         <div className="col-md-7 col-lg-8 mb-3">
           <h2>Equipment</h2>
-
-          <div className="border-bottom mt-3"></div>
-          {character.equipment.map(eq => {
-            const { name, price, id, type } = eq;
-            return <EquipmentItem key={eq.id} equipment={eq} afford={true} showButton={false} />
-          })}
+          { this.renderEquipment(character.equipment) }
         </div>
       </div>
     );
+  }
+
+  private renderAttributes(attributes: ValuedAttribute[], bonuses: { [id: number]: number}) {
+    return (
+      <div>
+        <div className="border-bottom"></div>
+        {attributes.map(({ attribute, modifier}) => {
+          const bonus = bonuses[attribute.id] || 0;
+          return (<div className="border-bottom py-3" key={attribute.id}>
+            <div>
+              {attribute.name}: {modifier} + <span className="text-success">{bonus}</span> = <span className="text-primary">{modifier + bonus}</span>
+            </div>
+          </div>);
+        }) }
+      </div>
+    );
+  }
+
+  private renderEquipment(equipment: Equipment[]) {
+    if (equipment.length === 0) {
+      return (
+        <div>Character has no equipment.</div>
+      )
+    }
+
+    return (
+      <div>
+        <div className="border-bottom mt-3"></div>
+        { equipment.map(eq => {
+          const { name, price, id, type } = eq;
+          return <EquipmentItem key={eq.id} equipment={eq} afford={true} showButton={false} />
+        }) }
+      </div>
+    )
   }
 
   private bonuses() {

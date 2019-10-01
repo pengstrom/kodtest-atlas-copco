@@ -1,7 +1,8 @@
 import { Component } from "react";
-import { Equipment } from '../objects/Store';
+import { Equipment, ValuedAttribute } from '../objects/Store';
 import React from "react";
 import _ from "lodash";
+import { DH_NOT_SUITABLE_GENERATOR } from "constants";
 
 interface EquipmentItemProps {
     /** The equipment object to render */
@@ -30,32 +31,46 @@ export class EquipmentItem extends Component<EquipmentItemProps> {
         const { id, type, price, bonuses, name } = this.props.equipment;
         return (
             <div className="border-bottom py-3 row" key={ id }>
-                <div className="col-sm-9">
+                <div className="col-md-10">
                     <div>
                         <strong>{ name}</strong> ({ _.capitalize(type)}): { price } Au
                     </div>
-                    { bonuses.length > 0 && <div>
-                        {bonuses.map(bonus => {
-                        return <span className="mr-3" key={bonus.attribute.id}>
-                            { bonus.attribute.name }: <span className="text-success">+{bonus.modifier}</span>
-                        </span>
-                        })}
-                    </div> }
+
+                    { this.renderBonuses(bonuses) }
+
+                    { !this.props.afford && <span className="text-danger">Insufficient funds</span>}
                 </div>
-                <div className="col-sm-3">
+
+                <div className="col-md-2">
                     { this.props.showButton && this.renderButton(this.props.equipment) }
                 </div>
             </div>
         )
     }
 
+    private renderBonuses(bonuses: ValuedAttribute[]) {
+        if (bonuses.length === 0) {
+            return <div></div>
+        }
+        
+        return (
+            <div>
+                { bonuses.map(bonus => {
+                return <span className="mr-3" key={bonus.attribute.id}>
+                    { bonus.attribute.name }: <span className="text-success">+{bonus.modifier}</span>
+                </span>
+                })}
+            </div>
+        );
+    }
+
     private renderButton(eq: Equipment) {
         return (
                 <button
-                    className="btn btn-danger mt-2 mt-sm-0 float-right"
+                    className="btn btn-success mt-2 mt-md-0"
                     onClick={() => this.props.onBuy!(eq)}
                     disabled={!this.props.afford} >
-                    {this.props.afford ? `Buy for ${eq.price} Au` : 'Insufficient funds'}
+                    Buy
                 </button>
         );
     }

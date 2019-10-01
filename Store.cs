@@ -4,10 +4,25 @@ using System.Collections.Generic;
 using MathNet.Numerics.Distributions;
 
 namespace hiddenGems {
+    /// <summary>
+    /// Singleton containing the store state kept in memory.
+    /// </summary>
     public sealed class Store {
+        /// <summary>
+        /// Store attributes for characters and items.
+        /// </summary>
         public Dictionary<int, Attribute> attributes;
+        /// <summary>
+        /// Available attributes are generated from this.
+        /// </summary>
         public readonly string[] attributeNames = {"Hit Points", "Luck", "Sneak"};
+        /// <summary>
+        /// The single customer.
+        /// </summary>
         public Character character;
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
         public static Store Instance {
             get {
                 lock(padlock) {
@@ -23,6 +38,9 @@ namespace hiddenGems {
         private Inventory inventory;
         private static readonly object padlock = new Object();
 
+        /// <summary>
+        /// Is not normally used.
+        /// </summary>
         public Store() {
             this.addAttributes();
 
@@ -31,16 +49,26 @@ namespace hiddenGems {
             this.generateCharacter();
         }
 
+        /// <summary>
+        /// Get the contents of the inventory.
+        /// </summary>
         public IEnumerable<Equipment> getInventory() {
             return this.inventory.inventory();
         }
 
+        /// <summary>
+        /// Get the contents of the character's inventory.
+        /// </summary>
         public IEnumerable<Equipment> getCharacterInventory() {
             return from eq in this.character.equipment select eq.Value;
         }
 
-        public Equipment purchaseEquipment(int charachterId, int equipmentId) {
-            Character character = this.getCharacterById(charachterId);
+
+        /// <summary>
+        /// Purchase equipment. If sufficient funds, the equipment will be removed from the inventory and given to the character.
+        /// </summary>
+        public Equipment purchaseEquipment(int characterId, int equipmentId) {
+            Character character = this.getCharacterById(characterId);
             Equipment equipment = this.inventory.getEquipmentById(equipmentId);
             int cost = equipment.price;
 
@@ -54,17 +82,26 @@ namespace hiddenGems {
             return equipment;
         }
 
+        /// <summary>
+        /// Get the character with the specified ID.
+        /// </summary>
         public Character getCharacterById(int charachterId)
         {
             // Todo: add support for multiple users
             return this.character;
         }
 
+        /// <summary>
+        /// Add more random items to the store.
+        /// </summary>
         public IEnumerable<Equipment> generateEquipmentAndRestock() {
             this.inventory.generateEquipment(StoreConfig.NEW_EQUIPMENT_COUNT_LAMBDA);
             return this.inventory.inventory();
         }
 
+        /// <summary>
+        /// Give the character some gold. Downsides are not apparent...
+        /// </summary>
         public int refinanceCharacter(int characterId) {
             var character = getCharacterById(characterId);
             

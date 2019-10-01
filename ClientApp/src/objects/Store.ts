@@ -1,20 +1,23 @@
+import { isJSXSpreadAttribute } from "@babel/types"
+
 export interface Character {
     id: number;
     name: string;
     gold: number;
     equipment: Equipment[];
-    attributes: { attribute: Attribute, modifier: number }[];
+    attributes: ValuedAttribute[];
 }
 
 export interface Equipment {
     id: number;
     name: string;
-    bonuses: Bonus[];
+    bonuses: ValuedAttribute[];
     price: number;
     type: 'trinket' | 'weapon' | 'armor';
 }
 
-export interface Bonus {
+/** Attribute with magnitude */
+export interface ValuedAttribute {
     attribute: Attribute;
     modifier: number;
 }
