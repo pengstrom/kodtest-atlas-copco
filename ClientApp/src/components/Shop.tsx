@@ -37,17 +37,25 @@ export class Shop extends Component<{}, StoreState> {
         const character = this.state.character.value;
         return (
             <div>
-                <h1>Shop</h1>
-                <p>The best deals here!</p>
+                <h1 className="border-bottom border-primary pb-2 mb-3">Shop</h1>
 
-                { character && <p>You have {character.gold} gold. See character page for refinancing.</p> }
+                <div className="row">
+                    <div className="col-md-8">
+                        { character && <p>You have <strong>{character.gold}</strong> Au. See character page for refinancing.</p> }
 
-                <button onClick={() => this.restock() }>Restock</button>
+                        <h2>Inventory ({this.inventorySize()})</h2>
+                        { this.renderInventory() }
+                    </div>
+                    <div className="col-md-4 mt-3 mt-sm-0">
+                        <h5>Restock</h5>
+                        <p>Use the button to wait for the store to restock.</p>
+                        <button className="btn btn-warning" onClick={() => this.restock() }>Wait for restock</button>
 
-                { this.renderBuying() }
+                        <h5 className="mt-3">Last bought</h5>
+                        { this.renderBuying() }
+                    </div>
+                </div>
 
-                <h2>Inventory</h2>
-                { this.renderInventory() }
             </div>
         )
     }
@@ -90,6 +98,7 @@ export class Shop extends Component<{}, StoreState> {
 
         return (
             <div>
+                <div className="border-bottom mt-3"></div>
                 {this.orderedInventory().map(eq => {
                     let afford = true;
                     let showButton = false;
@@ -146,6 +155,14 @@ export class Shop extends Component<{}, StoreState> {
             return [];
         }
         return _.orderBy(this.state.inventory.value, 'name');
+    }
+
+    private inventorySize() {
+        if (!this.state.inventory.value) {
+            return 0;
+        }
+
+        return this.state.inventory.value.length;
     }
 
     private async fetchInventory() {

@@ -31,12 +31,15 @@ export class CharacterContainer extends Component<{}, CharacterContainerState> {
 
     render() {
         return (
-            <div>
-                <h1>Character</h1>
-                { this.renderCharacter() }
-
-                <h1>Funding</h1>
-                { this.renderFunding() }
+            <div className="row">
+                <div className="col-md-9">
+                    <h1 className="border-bottom border-primary pb-2">Character</h1>
+                    { this.renderCharacter() }
+                </div>
+                <div className="col-md-3">
+                    <h1 className="border-bottom border-primary pb-2">Funding</h1>
+                    { this.renderFunding() }
+                </div>
             </div>
         )
     }
@@ -73,18 +76,13 @@ export class CharacterContainer extends Component<{}, CharacterContainerState> {
             )
         }
 
+        const last = funding.length > 0 && funding[funding.length - 1];
         return (
+
             <div>
-                <button onClick={() => this.getFunding()}>Get funding</button>
-                <ol>
-                    { this.state.funding.map(([added, total], idx) => {
-                        return (
-                            <li key={idx}>
-                                <p>{total} gold ({added} gold added).</p>
-                            </li>
-                        );
-                    }) }
-                </ol>
+                <p>Use the button to get additional funding.</p>
+                <button className="btn btn-warning mb-3" onClick={() => this.getFunding()}>Get funding</button>
+                {last && <p>{last[1]} Au ({last[0]} Au added).</p>}
             </div>
         )
     }

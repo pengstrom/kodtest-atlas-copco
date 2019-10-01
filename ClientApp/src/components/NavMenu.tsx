@@ -3,10 +3,10 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 
-export class NavMenu extends Component {
+export class NavMenu extends Component<{}, {collapsed: boolean}> {
   static displayName = NavMenu.name;
 
-  constructor (props) {
+  constructor (props: {}) {
     super(props);
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
@@ -35,9 +35,6 @@ export class NavMenu extends Component {
                 </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/shop">Shop</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/about">About</NavLink>
                 </NavItem>
               </ul>
             </Collapse>

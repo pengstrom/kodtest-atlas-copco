@@ -11,6 +11,7 @@ export interface Equipment {
     name: string;
     bonuses: Bonus[];
     price: number;
+    type: 'trinket' | 'weapon' | 'armor';
 }
 
 export interface Bonus {

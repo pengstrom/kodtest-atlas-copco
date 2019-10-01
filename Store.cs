@@ -6,7 +6,7 @@ using MathNet.Numerics.Distributions;
 namespace hiddenGems {
     public sealed class Store {
         public Dictionary<int, Attribute> attributes;
-        public readonly string[] attributeNames = {"Hit Points", "Luck"};
+        public readonly string[] attributeNames = {"Hit Points", "Luck", "Sneak"};
         public Character character;
         public static Store Instance {
             get {

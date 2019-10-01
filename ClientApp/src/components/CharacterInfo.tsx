@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Character, Attribute } from '../objects/Store';
 
+import './CharacterInfo.css';
+import _ from 'lodash';
+import { EquipmentItem } from './EquipmentItem';
+
 export interface CharacterProps {
   character: Character;
 }
@@ -14,43 +18,36 @@ export class CharacterInfo extends Component<CharacterProps> {
 
   render() {
     const bonuses = this.bonuses();
+    const character = this.props.character;
     return (
-      <div>
-        <h1>{this.props.character.name}</h1>
+      <div className="mt-3 row">
+        <div className="col-md-5 col-lg-4 mb-3">
+          <h2>{character.name}</h2>
 
-        <p>Id: {this.props.character.id}</p>
+          <p>Wealth: <strong>{character.gold}</strong> Au</p>
 
-        <p>Gold: {this.props.character.gold}</p>
+          <h5 className="mt-3">Attributes</h5>
 
-        <h2>Attributes</h2>
-
-        {this.props.character.attributes.map(({ attribute, modifier}) => {
-          return <div key={ attribute.id }>
-            <h3>{ attribute.name }</h3>
-            <p>Id: { attribute.id }</p>
-            <p>Value: { modifier }</p>
-            <p>Effective value: { modifier + (bonuses[attribute.id] || 0) }</p>
-          </div>;
-        })}
-
-        <h2>Equipment</h2>
-
-        {this.props.character.equipment.map(eq => {
-          const { name, price, id } = eq;
-          return <div key={ id }>
-            <h3>{name}</h3>
-            <p>Id: {id}</p>
-            <p>Price: {price}</p>
-
-            <h4>Bonuses</h4>
-            {eq.bonuses.map(bonus => {
-              return <div key={bonus.attribute.id}>
-                <h5>{bonus.attribute.name}</h5>
-                <p>Modifier: {bonus.modifier}</p>
+          <div className="border-bottom"></div>
+          {character.attributes.map(({ attribute, modifier}) => {
+            const bonus = bonuses[attribute.id] || 0;
+            return <div className="border-bottom py-3" key={attribute.id}>
+              <div>
+                {attribute.name}: {modifier} + <span className="text-success">{bonus}</span> = <span className="text-primary">{modifier + bonus}</span>
               </div>
-            })}
-          </div>
-        })}
+            </div>;
+          })}
+        </div>
+
+        <div className="col-md-7 col-lg-8 mb-3">
+          <h2>Equipment</h2>
+
+          <div className="border-bottom mt-3"></div>
+          {character.equipment.map(eq => {
+            const { name, price, id, type } = eq;
+            return <EquipmentItem key={eq.id} equipment={eq} afford={true} showButton={false} />
+          })}
+        </div>
       </div>
     );
   }
