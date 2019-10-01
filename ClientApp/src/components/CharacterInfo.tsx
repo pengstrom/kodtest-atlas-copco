@@ -13,6 +13,7 @@ export class CharacterInfo extends Component<CharacterProps> {
   }
 
   render() {
+    const bonuses = this.bonuses();
     return (
       <div>
         <h1>{this.props.character.name}</h1>
@@ -28,6 +29,7 @@ export class CharacterInfo extends Component<CharacterProps> {
             <h3>{ attribute.name }</h3>
             <p>Id: { attribute.id }</p>
             <p>Value: { modifier }</p>
+            <p>Effective value: { modifier + (bonuses[attribute.id] || 0) }</p>
           </div>;
         })}
 
@@ -51,5 +53,19 @@ export class CharacterInfo extends Component<CharacterProps> {
         })}
       </div>
     );
+  }
+
+  private bonuses() {
+    const equipment = this.props.character.equipment;
+    const bonuses: { [id: number]: number } = {};
+
+    for (const eq of equipment) {
+      for (const b of eq.bonuses) {
+        const id = b.attribute.id;
+        bonuses[id] = (bonuses[id] || 0) + b.modifier;
+      }
+    }
+
+    return bonuses;
   }
 }

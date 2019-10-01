@@ -3,13 +3,10 @@ import { Character } from "../objects/Store";
 import React from "react";
 import { CharacterInfo } from "./CharacterInfo";
 import { Api } from "../utils/api";
-import { fetchableResolve } from "../utils/types";
+import { fetchableResolve, Fetchable, fetchableInit } from "../utils/types";
 
 interface CharacterContainerState {
-    character: {
-        fetching: boolean;
-        value?: Character;
-    };
+    character: Fetchable<Character>;
     funding: [number, number][];
     gettingFunding: boolean;
 }
@@ -22,9 +19,7 @@ export class CharacterContainer extends Component<{}, CharacterContainerState> {
         super(props);
 
         this.state = {
-            character: {
-                fetching: true,
-            },
+            character: fetchableInit(true),
             funding: [],
             gettingFunding: false,
         };
