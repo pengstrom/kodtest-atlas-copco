@@ -56,7 +56,7 @@ namespace hiddenGems {
 
         public Character getCharacterById(int charachterId)
         {
-            // Future work: add support for multiple users
+            // Todo: add support for multiple users
             return this.character;
         }
 

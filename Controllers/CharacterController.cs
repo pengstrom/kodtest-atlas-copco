@@ -28,11 +28,12 @@ namespace hiddenGems.Controllers
         //     return equipmentExports;
         // }
 
-        [HttpGet("{id}")]
+        [HttpGet("me")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Info(int id) {
+        public IActionResult Info() {
             try {
+                int id = characterIdFromRequest();
                 var character = store.getCharacterById(id);
                 return Ok(new CharacterExport(character));
             } catch (StoreError e) {
@@ -46,6 +47,11 @@ namespace hiddenGems.Controllers
         public IActionResult Refinance(int id) {
             var gold = store.refinanceCharacter(id);
             return Ok(gold);
+        }
+
+        private int characterIdFromRequest() {
+            // Todo: Support multiple users.
+            return 1;
         }
     }
 }

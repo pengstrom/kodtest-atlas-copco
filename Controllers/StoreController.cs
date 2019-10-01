@@ -45,8 +45,15 @@ namespace hiddenGems.Controllers
         [HttpPost("restock")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Restock() {
-            var equipmentExports = store.generateEquipmentAndRestock().Select(eq => new EquipmentExport(eq));
-            return Ok(equipmentExports);
+            var updatedEquipmentExports = store.generateEquipmentAndRestock().Select(eq => new EquipmentExport(eq));
+            return Ok(updatedEquipmentExports);
+        }
+
+        [HttpGet("attributes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Attributes() {
+            var attributeExports = store.attributes.Select(att => new AttributeExport(att.Value));
+            return Ok(attributeExports);
         }
     }
 }
